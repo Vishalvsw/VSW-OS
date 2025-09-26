@@ -10,6 +10,8 @@ import Invoices from './pages/Invoices';
 import Settings from './pages/Settings';
 import ChatbotBuilder from './pages/ChatbotBuilder';
 import Clients from './pages/Clients';
+import Marketing from './pages/Marketing';
+import Team from './pages/Team';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -45,6 +47,8 @@ const App: React.FC = () => {
                 <Route path="invoices" element={<Invoices />} />
                 <Route path="chatbot-builder" element={<ChatbotBuilder />} />
                 <Route path="clients" element={<Clients />} />
+                <Route path="marketing" element={<Marketing />} />
+                <Route path="team" element={<Team />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>

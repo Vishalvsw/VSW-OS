@@ -7,13 +7,17 @@ import { InvoiceIcon } from './icons/InvoiceIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { ChatbotIcon } from './icons/ChatbotIcon';
 import { ClientIcon } from './icons/ClientIcon';
+import { MarketingIcon } from './icons/MarketingIcon';
+import { TeamIcon } from './icons/TeamIcon';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: DashboardIcon },
   { name: 'Projects', href: '/projects', icon: ProjectIcon },
   { name: 'Clients', href: '/clients', icon: ClientIcon },
   { name: 'CRM', href: '/crm', icon: CrmIcon },
-  { name: 'Invoices', href: '/invoices', icon: InvoiceIcon },
+  { name: 'Marketing', href: '/marketing', icon: MarketingIcon },
+  { name: 'Team', href: '/team', icon: TeamIcon },
+  { name: 'Finance', href: '/invoices', icon: InvoiceIcon },
   { name: 'Chatbot Builder', href: '/chatbot-builder', icon: ChatbotIcon },
 ];
 

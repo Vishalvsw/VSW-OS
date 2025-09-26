@@ -11,9 +11,21 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
   const location = useLocation();
 
   const getPageTitle = () => {
-    const path = location.pathname.split('/')[1];
-    if (!path || path === 'dashboard') return 'Dashboard';
-    return path.charAt(0).toUpperCase() + path.slice(1);
+    const path = location.pathname.split('/')[1] || 'dashboard';
+    
+    const pageTitles: { [key: string]: string } = {
+        'dashboard': 'Dashboard',
+        'projects': 'Projects',
+        'clients': 'Clients',
+        'crm': 'CRM',
+        'marketing': 'Marketing',
+        'team': 'Team',
+        'invoices': 'Finance',
+        'chatbot-builder': 'Chatbot Builder',
+        'settings': 'Settings'
+    };
+
+    return pageTitles[path] || 'Dashboard';
   };
   
   return (

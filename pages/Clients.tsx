@@ -57,8 +57,21 @@ const Clients: React.FC = () => {
                         <td className="py-3 px-4 text-gray-700">{client.company}</td>
                         <td className="py-3 px-4 text-gray-700">{client.email}</td>
                         <td className="py-3 px-4 text-gray-700">${client.totalBilled.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-gray-700">
-                            <button onClick={() => openEditModal(client)} className="text-primary hover:underline">Edit</button>
+                        <td className="py-3 px-4">
+                            <div className="flex items-center space-x-2">
+                                <button 
+                                    onClick={() => openEditModal(client)} 
+                                    className="inline-flex items-center px-3 py-1 text-sm font-medium text-primary-700 bg-primary-100 rounded-md hover:bg-primary-200 transition-colors"
+                                >
+                                    Edit
+                                </button>
+                                <a 
+                                    href={`mailto:${client.email}?subject=${encodeURIComponent('Following up from Agency OS')}&body=${encodeURIComponent(`Hi ${client.name},\n\nHope you're having a great week.\n\nBest,\nTenant Admin`)}`}
+                                    className="inline-flex items-center px-3 py-1 text-sm font-medium text-primary-700 bg-primary-100 rounded-md hover:bg-primary-200 transition-colors"
+                                >
+                                    Contact
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     ))}
