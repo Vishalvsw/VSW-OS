@@ -1,0 +1,5 @@
+{
+  "name": "Agency OS",
+  "description": "Agency OS is a multi-tenant SaaS platform that unifies CRM, project & resource management, digital-marketing campaign orchestration, AI tools (chatbots, content generation, campaign optimization), finance (invoicing/subscriptions), and client portals.",
+  "requestFramePermissions": []
+}
