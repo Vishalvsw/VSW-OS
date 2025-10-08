@@ -1,6 +1,7 @@
 
 import React from 'react';
 import type { Invoice } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 const mockInvoices: Invoice[] = [
   { id: 'INV-001', project: 'HRMS Build', amount: 15000, status: 'Paid', dueDate: '2023-07-30' },
@@ -17,13 +18,18 @@ const statusColors = {
 };
 
 const Invoices: React.FC = () => {
+  const { currentUser } = useAuth();
+  const canAddInvoice = currentUser && currentUser.role === 'Administrator';
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-gray-800">Invoices</h2>
-        <button className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
-          New Invoice
-        </button>
+        {canAddInvoice && (
+          <button className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
+            New Invoice
+          </button>
+        )}
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">

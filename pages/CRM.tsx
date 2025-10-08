@@ -2,6 +2,7 @@
 import React from 'react';
 import type { Lead } from '../types';
 import ProposalGenerator from '../components/ProposalGenerator';
+import { useAuth } from '../contexts/AuthContext';
 
 const mockLeads: Lead[] = [
   { id: '1', name: 'John Doe', company: 'Innovate LLC', email: 'john@innovate.co', status: 'Qualified', value: 50000 },
@@ -17,14 +18,19 @@ const statusColors = {
 };
 
 const CRM: React.FC = () => {
+  const { currentUser } = useAuth();
+  const canAddLead = currentUser && ['Administrator', 'Project Manager'].includes(currentUser.role);
+
   return (
     <div className="space-y-8">
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Leads</h2>
-          <button className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
-            New Lead
-          </button>
+          {canAddLead && (
+            <button className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
+              New Lead
+            </button>
+          )}
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white">

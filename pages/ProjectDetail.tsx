@@ -70,7 +70,7 @@ const ProjectDetail: React.FC = () => {
                                 <img src={member.avatar} alt={member.name} className="h-10 w-10 rounded-full object-cover" />
                                 <div>
                                     <p className="font-medium text-gray-800">{member.name}</p>
-                                    <p className="text-sm text-gray-500">{member.role}</p>
+                                    <p className="text-sm text-gray-500">{member.title}</p>
                                 </div>
                             </li>
                         ))}

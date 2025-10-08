@@ -1,18 +1,21 @@
 
 import React, { useState } from 'react';
+import { mockTeam } from '../data/mockData';
+import { TeamMember } from '../types';
 
 interface LoginProps {
-  onLogin: () => void;
+  onLogin: (user: TeamMember) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [selectedUserId, setSelectedUserId] = useState(mockTeam[0].id);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would validate credentials here
-    onLogin();
+    const user = mockTeam.find(u => u.id === selectedUserId);
+    if (user) {
+      onLogin(user);
+    }
   };
 
   return (
@@ -23,29 +26,22 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       </div>
       <div className="max-w-md w-full mx-auto mt-8 bg-white p-8 border border-gray-200 rounded-lg shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="email" className="text-sm font-medium text-gray-700 block">Email address</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+           <div>
+            <label htmlFor="user-select" className="text-sm font-medium text-gray-700 block mb-2">
+              Select a user profile to sign in
+            </label>
+            <select
+              id="user-select"
+              value={selectedUserId}
+              onChange={(e) => setSelectedUserId(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
-              placeholder="you@example.com"
-            />
-          </div>
-          <div>
-            <label htmlFor="password"  className="text-sm font-medium text-gray-700 block">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary focus:border-primary"
-              placeholder="••••••••"
-            />
+            >
+              {mockTeam.map(user => (
+                <option key={user.id} value={user.id}>
+                  {user.name} ({user.role})
+                </option>
+              ))}
+            </select>
           </div>
           <button
             type="submit"

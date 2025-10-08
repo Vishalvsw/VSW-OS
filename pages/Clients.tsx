@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import type { Client } from '../types';
 import { mockClients } from '../data/mockData';
 import ClientModal from '../components/ClientModal';
+import { useAuth } from '../contexts/AuthContext';
 
 const Clients: React.FC = () => {
     const [clients, setClients] = useState<Client[]>(mockClients);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+    const { currentUser } = useAuth();
+    const canAddClient = currentUser && ['Administrator', 'Project Manager'].includes(currentUser.role);
 
     const handleSaveClient = (client: Client) => {
         if (selectedClient) {
@@ -33,11 +36,13 @@ const Clients: React.FC = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold text-gray-800">Clients</h2>
-                <button 
-                    onClick={openAddModal}
-                    className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
-                    New Client
-                </button>
+                {canAddClient && (
+                    <button 
+                        onClick={openAddModal}
+                        className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
+                        New Client
+                    </button>
+                )}
             </div>
             <div className="overflow-x-auto">
                 <table className="min-w-full bg-white">

@@ -3,10 +3,14 @@ import { Link } from 'react-router-dom';
 import type { Project } from '../types';
 import { initialMockProjects } from '../data/mockData';
 import AddProjectModal from '../components/AddProjectModal';
+import { useAuth } from '../contexts/AuthContext';
 
 const Projects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>(initialMockProjects);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { currentUser } = useAuth();
+
+  const canAddProject = currentUser && ['Administrator', 'Project Manager'].includes(currentUser.role);
 
   const handleAddProject = (newProject: Omit<Project, 'id' | 'tasks' | 'team'>) => {
     const projectToAdd: Project = {
@@ -14,7 +18,7 @@ const Projects: React.FC = () => {
       id: `proj-${Date.now()}`,
       tasks: [],
       team: [ // Add a default team member or make it part of the form
-        { id: 'user-1', name: 'Alex Johnson', avatar: 'https://picsum.photos/seed/user-1/100', role: 'Project Manager' }
+        { id: 'user-1', name: 'Alex Johnson', avatar: 'https://picsum.photos/seed/user-1/100', title: 'Project Manager', role: 'Project Manager' }
       ]
     };
     setProjects(prevProjects => [projectToAdd, ...prevProjects]);
@@ -25,12 +29,14 @@ const Projects: React.FC = () => {
     <div className="space-y-6">
        <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Projects</h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700"
-        >
-          Add Project
-        </button>
+        {canAddProject && (
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700"
+          >
+            Add Project
+          </button>
+        )}
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -1,14 +1,12 @@
 
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
-interface HeaderProps {
-  onLogout: () => void;
-}
-
-const Header: React.FC<HeaderProps> = ({ onLogout }) => {
+const Header: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const location = useLocation();
+  const { currentUser, logout } = useAuth();
 
   const getPageTitle = () => {
     const path = location.pathname.split('/')[1] || 'dashboard';
@@ -40,10 +38,10 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
             >
               <img
                 className="h-9 w-9 rounded-full object-cover"
-                src="https://picsum.photos/100"
+                src={currentUser?.avatar}
                 alt="User avatar"
               />
-              <span className="hidden md:inline text-sm font-medium text-gray-700">Tenant Admin</span>
+              <span className="hidden md:inline text-sm font-medium text-gray-700">{currentUser?.name}</span>
               <svg className="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
             </button>
             {dropdownOpen && (
@@ -53,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ onLogout }) => {
               >
                 <a href="#/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                 <button 
-                  onClick={onLogout} 
+                  onClick={logout} 
                   className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 >
                   Sign out

@@ -12,19 +12,35 @@ import ChatbotBuilder from './pages/ChatbotBuilder';
 import Clients from './pages/Clients';
 import Marketing from './pages/Marketing';
 import Team from './pages/Team';
+import { AuthProvider } from './contexts/AuthContext';
+import Authorization from './components/Authorization';
+import type { TeamMember, Role } from './types';
+import Unauthorized from './pages/Unauthorized';
+
+const ROUTE_ROLES: Record<string, Role[]> = {
+    dashboard: ['Administrator', 'Project Manager', 'Team Member', 'Client'],
+    projects: ['Administrator', 'Project Manager', 'Team Member', 'Client'],
+    clients: ['Administrator', 'Project Manager'],
+    crm: ['Administrator', 'Project Manager'],
+    marketing: ['Administrator'],
+    team: ['Administrator', 'Project Manager'],
+    invoices: ['Administrator', 'Client'],
+    'chatbot-builder': ['Administrator'],
+    settings: ['Administrator'],
+};
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<TeamMember | null>(null);
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
+  const handleLogin = (user: TeamMember) => {
+    setCurrentUser(user);
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
+    setCurrentUser(null);
   };
 
-  if (!isAuthenticated) {
+  if (!currentUser) {
     return (
       <Router>
         <Routes>
@@ -37,22 +53,25 @@ const App: React.FC = () => {
 
   return (
     <Router>
+      <AuthProvider user={currentUser} onLogout={handleLogout}>
         <Routes>
-            <Route path="/" element={<Layout onLogout={handleLogout} />}>
+            <Route path="/" element={<Layout />}>
                 <Route index element={<Navigate to="/dashboard" replace />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="projects" element={<Projects />} />
-                <Route path="projects/:projectId" element={<ProjectDetail />} />
-                <Route path="crm" element={<CRM />} />
-                <Route path="invoices" element={<Invoices />} />
-                <Route path="chatbot-builder" element={<ChatbotBuilder />} />
-                <Route path="clients" element={<Clients />} />
-                <Route path="marketing" element={<Marketing />} />
-                <Route path="team" element={<Team />} />
-                <Route path="settings" element={<Settings />} />
+                <Route path="dashboard" element={<Authorization allowedRoles={ROUTE_ROLES.dashboard}><Dashboard /></Authorization>} />
+                <Route path="projects" element={<Authorization allowedRoles={ROUTE_ROLES.projects}><Projects /></Authorization>} />
+                <Route path="projects/:projectId" element={<Authorization allowedRoles={ROUTE_ROLES.projects}><ProjectDetail /></Authorization>} />
+                <Route path="clients" element={<Authorization allowedRoles={ROUTE_ROLES.clients}><Clients /></Authorization>} />
+                <Route path="crm" element={<Authorization allowedRoles={ROUTE_ROLES.crm}><CRM /></Authorization>} />
+                <Route path="marketing" element={<Authorization allowedRoles={ROUTE_ROLES.marketing}><Marketing /></Authorization>} />
+                <Route path="team" element={<Authorization allowedRoles={ROUTE_ROLES.team}><Team /></Authorization>} />
+                <Route path="invoices" element={<Authorization allowedRoles={ROUTE_ROLES.invoices}><Invoices /></Authorization>} />
+                <Route path="chatbot-builder" element={<Authorization allowedRoles={ROUTE_ROLES['chatbot-builder']}><ChatbotBuilder /></Authorization>} />
+                <Route path="settings" element={<Authorization allowedRoles={ROUTE_ROLES.settings}><Settings /></Authorization>} />
+                <Route path="unauthorized" element={<Unauthorized />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>
         </Routes>
+      </AuthProvider>
     </Router>
   );
 };

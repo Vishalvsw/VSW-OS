@@ -1,10 +1,13 @@
+export type Role = 'Administrator' | 'Project Manager' | 'Team Member' | 'Client';
+
 export type TaskStatus = 'To Do' | 'In Progress' | 'Done';
 
 export interface TeamMember {
   id: string;
   name: string;
   avatar: string;
-  role: string;
+  title: string; // e.g. 'Project Manager', 'Lead Developer'
+  role: Role;   // System access role
 }
 
 export interface Task {
@@ -48,7 +51,7 @@ export interface GeneratedProposal {
 export type LeadStatus = 'New' | 'Contacted' | 'Qualified' | 'Lost';
 
 export interface Lead {
-    id: string;
+    id:string;
     name: string;
     company: string;
     email: string;
