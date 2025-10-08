@@ -1,8 +1,9 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import type { Lead } from '../types';
 import ProposalGenerator from '../components/ProposalGenerator';
-import { useAuth } from '../contexts/AuthContext';
+import { usePermissions } from '../hooks/usePermissions';
+import CrmChatbot from '../components/CrmChatbot';
+import { ChatbotIcon } from '../components/icons/ChatbotIcon';
 
 const mockLeads: Lead[] = [
   { id: '1', name: 'John Doe', company: 'Innovate LLC', email: 'john@innovate.co', status: 'Qualified', value: 50000 },
@@ -18,19 +19,29 @@ const statusColors = {
 };
 
 const CRM: React.FC = () => {
-  const { currentUser } = useAuth();
-  const canAddLead = currentUser && ['Administrator', 'Project Manager'].includes(currentUser.role);
+  const { can } = usePermissions();
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   return (
     <div className="space-y-8">
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Leads</h2>
-          {canAddLead && (
-            <button className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
-              New Lead
+          <div className="flex items-center space-x-4">
+            <button
+                onClick={() => setIsChatOpen(true)}
+                className="flex items-center px-4 py-2 bg-primary-100 text-primary font-semibold rounded-md hover:bg-primary-200 transition-colors"
+                aria-label="Open AI Assistant"
+            >
+                <ChatbotIcon className="h-5 w-5 mr-2" />
+                AI Assistant
             </button>
-          )}
+            {can('lead:create') && (
+              <button className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
+                New Lead
+              </button>
+            )}
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white">
@@ -60,6 +71,11 @@ const CRM: React.FC = () => {
         </div>
       </div>
       <ProposalGenerator />
+      <CrmChatbot 
+        leads={mockLeads}
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+      />
     </div>
   );
 };

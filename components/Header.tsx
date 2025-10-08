@@ -20,6 +20,7 @@ const Header: React.FC = () => {
         'team': 'Team',
         'invoices': 'Finance',
         'chatbot-builder': 'Chatbot Builder',
+        'freelancer-portal': 'Freelancer Portal',
         'settings': 'Settings'
     };
 

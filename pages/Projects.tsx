@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom';
 import type { Project } from '../types';
 import { initialMockProjects } from '../data/mockData';
 import AddProjectModal from '../components/AddProjectModal';
-import { useAuth } from '../contexts/AuthContext';
+import { usePermissions } from '../hooks/usePermissions';
 
 const Projects: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>(initialMockProjects);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { currentUser } = useAuth();
-
-  const canAddProject = currentUser && ['Administrator', 'Project Manager'].includes(currentUser.role);
+  const { can } = usePermissions();
 
   const handleAddProject = (newProject: Omit<Project, 'id' | 'tasks' | 'team'>) => {
     const projectToAdd: Project = {
@@ -29,7 +27,7 @@ const Projects: React.FC = () => {
     <div className="space-y-6">
        <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-gray-800">Projects</h1>
-        {canAddProject && (
+        {can('project:create') && (
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700"

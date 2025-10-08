@@ -7,7 +7,7 @@ interface AddUserModalProps {
   onSave: (user: Omit<TeamMember, 'id'>) => void;
 }
 
-const ROLES: Role[] = ['Administrator', 'Project Manager', 'Team Member', 'Client'];
+const ROLES: Role[] = ['Administrator', 'Project Manager', 'Team Member', 'Client', 'Freelancer'];
 
 const AddUserModal: React.FC<AddUserModalProps> = ({ isOpen, onClose, onSave }) => {
   const [name, setName] = useState('');

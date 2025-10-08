@@ -12,21 +12,23 @@ import ChatbotBuilder from './pages/ChatbotBuilder';
 import Clients from './pages/Clients';
 import Marketing from './pages/Marketing';
 import Team from './pages/Team';
+import FreelancerPortal from './pages/FreelancerPortal';
 import { AuthProvider } from './contexts/AuthContext';
 import Authorization from './components/Authorization';
 import type { TeamMember, Role } from './types';
 import Unauthorized from './pages/Unauthorized';
+import { ROLES_CONFIG } from './config/roles';
 
-const ROUTE_ROLES: Record<string, Role[]> = {
-    dashboard: ['Administrator', 'Project Manager', 'Team Member', 'Client'],
-    projects: ['Administrator', 'Project Manager', 'Team Member', 'Client'],
-    clients: ['Administrator', 'Project Manager'],
-    crm: ['Administrator', 'Project Manager'],
-    marketing: ['Administrator'],
-    team: ['Administrator', 'Project Manager'],
-    invoices: ['Administrator', 'Client'],
-    'chatbot-builder': ['Administrator'],
-    settings: ['Administrator'],
+// This helper function creates a single source of truth for route access
+// by reading from the centralized roles configuration.
+const getRolesForRoute = (path: string): Role[] => {
+    const rolesWithAccess: Role[] = [];
+    for (const role in ROLES_CONFIG) {
+        if (ROLES_CONFIG[role as Role].routes.includes(path)) {
+            rolesWithAccess.push(role as Role);
+        }
+    }
+    return rolesWithAccess;
 };
 
 const App: React.FC = () => {
@@ -57,16 +59,17 @@ const App: React.FC = () => {
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route index element={<Navigate to="/dashboard" replace />} />
-                <Route path="dashboard" element={<Authorization allowedRoles={ROUTE_ROLES.dashboard}><Dashboard /></Authorization>} />
-                <Route path="projects" element={<Authorization allowedRoles={ROUTE_ROLES.projects}><Projects /></Authorization>} />
-                <Route path="projects/:projectId" element={<Authorization allowedRoles={ROUTE_ROLES.projects}><ProjectDetail /></Authorization>} />
-                <Route path="clients" element={<Authorization allowedRoles={ROUTE_ROLES.clients}><Clients /></Authorization>} />
-                <Route path="crm" element={<Authorization allowedRoles={ROUTE_ROLES.crm}><CRM /></Authorization>} />
-                <Route path="marketing" element={<Authorization allowedRoles={ROUTE_ROLES.marketing}><Marketing /></Authorization>} />
-                <Route path="team" element={<Authorization allowedRoles={ROUTE_ROLES.team}><Team /></Authorization>} />
-                <Route path="invoices" element={<Authorization allowedRoles={ROUTE_ROLES.invoices}><Invoices /></Authorization>} />
-                <Route path="chatbot-builder" element={<Authorization allowedRoles={ROUTE_ROLES['chatbot-builder']}><ChatbotBuilder /></Authorization>} />
-                <Route path="settings" element={<Authorization allowedRoles={ROUTE_ROLES.settings}><Settings /></Authorization>} />
+                <Route path="dashboard" element={<Authorization allowedRoles={getRolesForRoute('/dashboard')}><Dashboard /></Authorization>} />
+                <Route path="projects" element={<Authorization allowedRoles={getRolesForRoute('/projects')}><Projects /></Authorization>} />
+                <Route path="projects/:projectId" element={<Authorization allowedRoles={getRolesForRoute('/projects')}><ProjectDetail /></Authorization>} />
+                <Route path="clients" element={<Authorization allowedRoles={getRolesForRoute('/clients')}><Clients /></Authorization>} />
+                <Route path="crm" element={<Authorization allowedRoles={getRolesForRoute('/crm')}><CRM /></Authorization>} />
+                <Route path="marketing" element={<Authorization allowedRoles={getRolesForRoute('/marketing')}><Marketing /></Authorization>} />
+                <Route path="team" element={<Authorization allowedRoles={getRolesForRoute('/team')}><Team /></Authorization>} />
+                <Route path="invoices" element={<Authorization allowedRoles={getRolesForRoute('/invoices')}><Invoices /></Authorization>} />
+                <Route path="chatbot-builder" element={<Authorization allowedRoles={getRolesForRoute('/chatbot-builder')}><ChatbotBuilder /></Authorization>} />
+                <Route path="freelancer-portal" element={<Authorization allowedRoles={getRolesForRoute('/freelancer-portal')}><FreelancerPortal /></Authorization>} />
+                <Route path="settings" element={<Authorization allowedRoles={getRolesForRoute('/settings')}><Settings /></Authorization>} />
                 <Route path="unauthorized" element={<Unauthorized />} />
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Route>

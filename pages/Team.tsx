@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { mockTeam as initialMockTeam } from '../data/mockData';
 import type { TeamMember } from '../types';
-import { useAuth } from '../contexts/AuthContext';
+import { usePermissions } from '../hooks/usePermissions';
 import EditUserModal from '../components/EditUserModal';
 import AddUserModal from '../components/AddUserModal';
 
@@ -9,7 +9,7 @@ const Team: React.FC = () => {
   const [team, setTeam] = useState<TeamMember[]>(initialMockTeam);
   const [editingUser, setEditingUser] = useState<TeamMember | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const { currentUser } = useAuth();
+  const { can } = usePermissions();
 
   const handleUpdateUser = (updatedUser: TeamMember) => {
     setTeam(team.map(u => u.id === updatedUser.id ? updatedUser : u));
@@ -26,14 +26,12 @@ const Team: React.FC = () => {
     setIsAddModalOpen(false);
   };
 
-  const isAdmin = currentUser?.role === 'Administrator';
-
   return (
     <>
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-gray-800">Team Members</h2>
-            {isAdmin && (
+            {can('user:create') && (
                 <button
                     onClick={() => setIsAddModalOpen(true)}
                     className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700"
@@ -49,7 +47,7 @@ const Team: React.FC = () => {
                 <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Member</th>
                 <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Title</th>
                 <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">System Role</th>
-                {isAdmin && <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Actions</th>}
+                {can('user:edit') && <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -65,7 +63,7 @@ const Team: React.FC = () => {
                   </td>
                   <td className="py-3 px-4 text-gray-700">{member.title}</td>
                   <td className="py-3 px-4 text-gray-700">{member.role}</td>
-                  {isAdmin && (
+                  {can('user:edit') && (
                     <td className="py-3 px-4">
                       <button 
                         onClick={() => setEditingUser(member)}

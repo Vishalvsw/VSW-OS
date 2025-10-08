@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import type { Client } from '../types';
 import { mockClients } from '../data/mockData';
 import ClientModal from '../components/ClientModal';
-import { useAuth } from '../contexts/AuthContext';
+import { usePermissions } from '../hooks/usePermissions';
 
 const Clients: React.FC = () => {
     const [clients, setClients] = useState<Client[]>(mockClients);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-    const { currentUser } = useAuth();
-    const canAddClient = currentUser && ['Administrator', 'Project Manager'].includes(currentUser.role);
+    const { can } = usePermissions();
 
     const handleSaveClient = (client: Client) => {
         if (selectedClient) {
@@ -36,7 +35,7 @@ const Clients: React.FC = () => {
         <div className="bg-white p-6 rounded-lg shadow-sm">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold text-gray-800">Clients</h2>
-                {canAddClient && (
+                {can('client:create') && (
                     <button 
                         onClick={openAddModal}
                         className="px-4 py-2 bg-primary text-white font-semibold rounded-md hover:bg-primary-700">
@@ -64,12 +63,14 @@ const Clients: React.FC = () => {
                         <td className="py-3 px-4 text-gray-700">${client.totalBilled.toLocaleString()}</td>
                         <td className="py-3 px-4">
                             <div className="flex items-center space-x-2">
-                                <button 
-                                    onClick={() => openEditModal(client)} 
-                                    className="inline-flex items-center px-3 py-1 text-sm font-medium text-primary-700 bg-primary-100 rounded-md hover:bg-primary-200 transition-colors"
-                                >
-                                    Edit
-                                </button>
+                                {can('client:edit') && (
+                                    <button 
+                                        onClick={() => openEditModal(client)} 
+                                        className="inline-flex items-center px-3 py-1 text-sm font-medium text-primary-700 bg-primary-100 rounded-md hover:bg-primary-200 transition-colors"
+                                    >
+                                        Edit
+                                    </button>
+                                )}
                                 <a 
                                     href={`mailto:${client.email}?subject=${encodeURIComponent('Following up from Agency OS')}&body=${encodeURIComponent(`Hi ${client.name},\n\nHope you're having a great week.\n\nBest,\nTenant Admin`)}`}
                                     className="inline-flex items-center px-3 py-1 text-sm font-medium text-primary-700 bg-primary-100 rounded-md hover:bg-primary-200 transition-colors"

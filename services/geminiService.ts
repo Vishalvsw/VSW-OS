@@ -1,5 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import type { GeneratedProposal } from '../types';
+import type { GeneratedProposal, Lead } from '../types';
 
 // FIX: Per coding guidelines, initialize GoogleGenAI directly.
 // The API key is assumed to be available as a hard requirement.
@@ -119,6 +119,47 @@ export const generateChatResponse = async (
         return response.text;
     } catch (error) {
         console.error("Error calling Gemini API for chat:", error);
+        throw new Error("Failed to get chat response from the AI service.");
+    }
+};
+
+export const generateCrmChatResponse = async (
+    leads: Lead[],
+    messageHistory: { role: 'user' | 'model'; parts: { text: string }[] }[],
+    newMessage: string
+): Promise<string> => {
+    
+    const systemInstruction = `You are an intelligent CRM assistant for an agency. Your goal is to help users understand and manage their sales leads.
+- Use the provided lead data to answer questions accurately.
+- You can answer questions like "Who are the new leads?", "What is the total value of qualified leads?", or "Suggest a follow-up action for Jane Smith".
+- When asked for suggestions, provide concise, actionable advice.
+- If you don't know the answer or the data isn't available, say so clearly.
+- The current date is ${new Date().toLocaleDateString()}.
+
+Here is the current list of leads in JSON format:
+---
+${JSON.stringify(leads, null, 2)}
+---
+`;
+
+    const contents = [
+        ...messageHistory,
+        { role: 'user', parts: [{ text: newMessage }] }
+    ];
+
+    try {
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: contents,
+            config: {
+                systemInstruction: systemInstruction,
+                temperature: 0.5,
+            },
+        });
+        
+        return response.text;
+    } catch (error) {
+        console.error("Error calling Gemini API for CRM chat:", error);
         throw new Error("Failed to get chat response from the AI service.");
     }
 };

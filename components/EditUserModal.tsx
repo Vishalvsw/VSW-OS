@@ -8,7 +8,7 @@ interface EditUserModalProps {
   onSave: (user: TeamMember) => void;
 }
 
-const ROLES: Role[] = ['Administrator', 'Project Manager', 'Team Member', 'Client'];
+const ROLES: Role[] = ['Administrator', 'Project Manager', 'Team Member', 'Client', 'Freelancer'];
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, onSave }) => {
   const [role, setRole] = useState<Role>(user.role);

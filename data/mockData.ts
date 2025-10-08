@@ -1,4 +1,4 @@
-import type { Project, TeamMember, Task, Client } from '../types';
+import type { Project, TeamMember, Task, Client, Freelancer, CommissionDeal, ScheduledPost } from '../types';
 
 export const mockTeam: TeamMember[] = [
   { id: 'admin-1', name: 'Admin User', avatar: 'https://picsum.photos/seed/admin-1/100', title: 'System Administrator', role: 'Administrator' },
@@ -9,6 +9,7 @@ export const mockTeam: TeamMember[] = [
   { id: 'user-4', name: 'Teal\'c', avatar: 'https://picsum.photos/seed/user-4/100', title: 'Backend Developer', role: 'Team Member' },
   { id: 'user-5', name: 'George Hammond', avatar: 'https://picsum.photos/seed/user-5/100', title: 'QA Tester', role: 'Team Member' },
   { id: 'client-user-1', name: 'John Doe (Client)', avatar: 'https://picsum.photos/seed/client-user-1/100', title: 'Client Contact', role: 'Client' },
+  { id: 'freelancer-1', name: 'Maria Garcia (Freelancer)', avatar: 'https://picsum.photos/seed/freelancer-1/100', title: 'Freelance Web Developer', role: 'Freelancer' },
 ];
 
 const project1Tasks: Task[] = [
@@ -68,4 +69,45 @@ export const mockClients: Client[] = [
     { id: 'client-2', name: 'Jane Smith', company: 'Solutions Inc.', email: 'jane@solutions.com', phone: '555-5678', projects: 1, totalBilled: 25000 },
     { id: 'client-3', name: 'Peter Jones', company: 'Tech Forward', email: 'peter@techforward.io', phone: '555-9012', projects: 2, totalBilled: 120000 },
     { id: 'client-4', name: 'Susan Lee', company: 'Creative Co.', email: 'susan@creative.co', phone: '555-3456', projects: 0, totalBilled: 0 },
+];
+
+export const mockFreelancers: Freelancer[] = [
+    { id: 'freelancer-1', name: 'Maria Garcia', email: 'maria.g@example.com', specialty: 'Web Development', commissionRate: 10 },
+    { id: 'freelancer-2', name: 'David Chen', email: 'david.c@example.com', specialty: 'SEO & Marketing', commissionRate: 12 },
+    { id: 'freelancer-3', name: 'Emily White', email: 'emily.w@example.com', specialty: 'Graphic Design', commissionRate: 8 },
+];
+
+export const mockCommissionDeals: CommissionDeal[] = [
+    { 
+        id: 'deal-1',
+        freelancer: { id: 'freelancer-1', name: 'Maria Garcia' },
+        client: { id: 'client-4', name: 'Susan Lee', company: 'Creative Co.' },
+        projectName: 'E-commerce Platform',
+        projectValue: 60000,
+        commissionRate: 10,
+        commissionAmount: 6000,
+        status: 'Paid',
+        dateClosed: '2023-07-15'
+    },
+    { 
+        id: 'deal-2',
+        freelancer: { id: 'freelancer-2', name: 'David Chen' },
+        client: { id: 'client-2', name: 'Jane Smith', company: 'Solutions Inc.' },
+        projectName: 'Q4 SEO Strategy',
+        projectValue: 15000,
+        commissionRate: 12,
+        commissionAmount: 1800,
+        status: 'Pending Payment',
+        dateClosed: '2023-08-01'
+    }
+];
+
+export const mockScheduledPosts: ScheduledPost[] = [
+    { id: 'post-1', day: 'Monday', platform: 'LinkedIn', content: 'The future of AI in project management. #AI #ProjectManagement', image: 'https://picsum.photos/seed/post-1/400/200', status: 'Scheduled' },
+    { id: 'post-2', day: 'Tuesday', platform: 'Instagram', content: 'Behind the scenes of our latest design sprint! 🎨', image: 'https://picsum.photos/seed/post-2/400/400', status: 'Scheduled' },
+    { id: 'post-3', day: 'Wednesday', platform: 'Twitter', content: 'Quick Tip: How to optimize your CRM workflow in under 5 minutes. #CRM #Productivity', image: 'https://picsum.photos/seed/post-3/400/200', status: 'Scheduled' },
+    { id: 'post-4', day: 'Wednesday', platform: 'Facebook', content: 'Case Study: How we helped Innovate LLC boost their revenue by 30%.', image: 'https://picsum.photos/seed/post-4/400/200', status: 'Posted' },
+    { id: 'post-5', day: 'Friday', platform: 'LinkedIn', content: 'Celebrating another successful project launch! Congrats to the team and our amazing client, Tech Forward.', image: 'https://picsum.photos/seed/post-5/400/200', status: 'Scheduled' },
+    { id: 'post-6', day: 'Friday', platform: 'Instagram', content: 'It\'s Friday! Time to power down... but not before one last code push. 😉 #DevLife', image: 'https://picsum.photos/seed/post-6/400/400', status: 'Draft' },
+    { id: 'post-7', day: 'Sunday', platform: 'Facebook', content: 'Get ready for the week ahead! What are your goals for the next 7 days?', image: 'https://picsum.photos/seed/post-7/400/200', status: 'Scheduled' },
 ];

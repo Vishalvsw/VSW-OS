@@ -11,6 +11,7 @@ import { ChatbotIcon } from './icons/ChatbotIcon';
 import { ClientIcon } from './icons/ClientIcon';
 import { MarketingIcon } from './icons/MarketingIcon';
 import { TeamIcon } from './icons/TeamIcon';
+import { FreelancerIcon } from './icons/FreelancerIcon';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: DashboardIcon },
@@ -21,6 +22,7 @@ const navigation = [
   { name: 'Team', href: '/team', icon: TeamIcon },
   { name: 'Finance', href: '/invoices', icon: InvoiceIcon },
   { name: 'Chatbot Builder', href: '/chatbot-builder', icon: ChatbotIcon },
+  { name: 'Freelancer Portal', href: '/freelancer-portal', icon: FreelancerIcon },
 ];
 
 const Sidebar: React.FC = () => {
@@ -28,7 +30,7 @@ const Sidebar: React.FC = () => {
 
   if (!currentUser) return null;
 
-  const accessibleRoutes = ROLES_CONFIG[currentUser.role].permissions;
+  const accessibleRoutes = ROLES_CONFIG[currentUser.role].routes;
   const filteredNavigation = navigation.filter(item => accessibleRoutes.includes(item.href));
   const canSeeSettings = accessibleRoutes.includes('/settings');
 
