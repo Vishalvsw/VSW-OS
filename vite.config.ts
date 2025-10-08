@@ -21,3 +21,11 @@ export default defineConfig(({ mode }) => {
       }
     };
 });
+
+
+{
+  "redirects": [
+    { "source": "/(.*)", "destination": "/", "statusCode": 200 }
+  ]
+}
+
