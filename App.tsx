@@ -19,6 +19,14 @@ import type { TeamMember, Role } from './types';
 import Unauthorized from './pages/Unauthorized';
 import { ROLES_CONFIG } from './config/roles';
 
+
+
+
+import { BrowserRouter as Router } from 'react-router-dom';
+
+<Router basename="/"> 
+
+
 // This helper function creates a single source of truth for route access
 // by reading from the centralized roles configuration.
 
@@ -28,7 +36,9 @@ const getBasename = (): string => {
   const match = window.location.pathname.match(/^(\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i);
   return match ? match[1] : '/';
 };
- 
+
+
+  
 const getRolesForRoute = (path: string): Role[] => {
     const rolesWithAccess: Role[] = [];
     for (const role in ROLES_CONFIG) {
